@@ -1,0 +1,27 @@
+{
+  "local-IOS": {
+    "ip": "127.0.0.1",
+    "port": "4725",
+    "path": "/wd/hub"
+  },
+  "local-ANDROID": {
+    "ip": "127.0.0.1",
+    "port": "472",
+    "path": "/wd/hub"
+  },
+  "drivertwo": {
+    "ip": "127.0.0.1",
+    "port": "4727",
+    "path": "/wd/hub"
+  },
+  "miniMac": {
+    "ip": "10.176.73.189",
+    "port": "XXXX",
+    "path": "/wd/hub"
+  },
+  "sauceLab": {
+    "ip": "eu1.appium.testobject.com",
+    "port": "",
+    "path": "/wd/hub"
+  }
+}

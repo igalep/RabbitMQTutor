@@ -1,0 +1,40 @@
+{
+
+    "Sony_Xperia_L3_here": {
+      "androidVer": "8",
+      "os": "ANDROID",
+      "udid":"hh",
+      "serverPort": "4722"
+    },
+
+    "Mi_A1":{
+      "androidVer":"9",
+      "os": "ANDROID",
+      "udid":"0139fd039805",
+      "serverPort": "4723"
+
+    },
+  "pixel3-XL":{
+    "androidVer":"9",
+    "os": "ANDROID",
+    "udid": "8B5Y0TYFT",
+    "serverPort": "4720"
+
+  },
+
+  "pixel3-S":{
+    "androidVer":"9",
+    "os": "ANDROID",
+    "udid": "8B7X158UB",
+    "serverPort": "4725"
+
+  },
+
+  "pixel2":{
+    "androidVer":"9",
+    "os": "ANDROID",
+    "udid": "emulator-5554",
+    "serverPort": "4725"
+
+  }
+}

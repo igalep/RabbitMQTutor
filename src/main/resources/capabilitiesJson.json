@@ -1,0 +1,22 @@
+{
+  "ANDROID": {
+    "appPackage":"com.google.android.apps.messaging",
+    "appActivity":"com.google.android.apps.messaging.ui.ConversationListActivity",
+    "platformName": "Android",
+    "autoGrantPermissions":true,
+    "autoDismissAlerts":true,
+    "permission_allow_button": true,
+    "locationServicesAuthorized":true,
+    "phoneOnly": true,
+    "testobject_api_key": "B23F5F0CA9244D19A7A1B1A62C67B98F",
+    "testobject_test_name": "SOMO-Android",
+    "fullReset":false,
+    "noReset":true,
+    "newCommandTimeout":600
+  },
+  "IOS":{
+
+  }
+}
+
+
