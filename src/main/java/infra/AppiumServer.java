@@ -22,6 +22,7 @@ public class AppiumServer {
         DesiredCapabilities cap = new DesiredCapabilities();
         cap.setCapability("noReset", "true");
         AppiumServiceBuilder builder = new AppiumServiceBuilder();
+        
         builder.withAppiumJS(new File(Configuration.getAppiumPath()));
         builder.withIPAddress(Configuration.getServerIp());
         builder.usingPort(serverPort);
