@@ -7,13 +7,11 @@ import connection.DriverManagerFactory;
 import dto.DeviceData;
 import infra.AppiumServer;
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.json.JSONObject;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
-
+import pom.EditMessage;
+import pom.Messages;
+import pom.NewChatPage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -52,7 +50,6 @@ public class Pixel3_XL implements AutoCloseable, Runnable{
         deviceB = device_b;
         devicDetails = readDeviceFile;
         deviceDetails = getSubJSON(devicDetails, deviceA);
-        //int serverPort = deviceDetails.getInt("serverPort");
         try {
             service = appiumServer.initServer();
             urlPixel3_XL = appiumServer.getServerURL();
@@ -68,38 +65,9 @@ public class Pixel3_XL implements AutoCloseable, Runnable{
     public void run() {
 
         try {
+            sendMessage();
+            sendMessage2();
 
-            ad.findElement(By.id("com.google.android.apps.messaging:id/start_new_conversation_button")).click();
-            Thread.sleep(1000);
-            ad.findElement(By.id("com.google.android.apps.messaging:id/recipient_text_view")).click();
-            Actions action=new Actions(ad);
-            action.sendKeys(deviceB).build().perform();
-            Thread.sleep(1000);
-            ad.findElement(By.id("com.google.android.apps.messaging:id/contact_list_view")).findElements(By.className("android.widget.FrameLayout")).get(0).click();
-            ad.findElement(By.id("com.google.android.apps.messaging:id/compose_message_text")).click();
-            String message = "Hi mate! what is the time?";
-            ad.findElement(By.id("com.google.android.apps.messaging:id/compose_message_text")).sendKeys(message);
-            ad.findElement(By.id("com.google.android.apps.messaging:id/send_message_button_icon")).click();
-
-            Date date = new Date();
-            DateFormat format = new SimpleDateFormat("HHmm");
-            String time = format.format(date);
-
-            String messageRabbit = " ["+deviceA+"] "+message;
-            System.out.println(messageRabbit);
-            String response = this.call(messageRabbit);
-            Boolean correctness = (response.contains(time))?true:false;
-            System.out.println(" ["+deviceA+"] Got "+deviceB+" response- (" + response + " ) , and the correctness is: "+correctness);
-
-            String message2 = " What are you doing today?";
-            ad.findElement(By.id("com.google.android.apps.messaging:id/compose_message_text")).sendKeys(message2);
-            ad.findElement(By.id("com.google.android.apps.messaging:id/send_message_button_icon")).click();
-
-            String messageRabbit2 = " ["+deviceA+"] "+message2;
-            System.out.println(messageRabbit2);
-            String response2 = this.call(messageRabbit2);
-            Boolean correctness2 = (response2.contains("working"))?true:false;
-            System.out.println(" ["+deviceA+"] Got "+deviceB+" response- (" + response2 + " ) , and the correctness is: "+correctness2);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,6 +110,42 @@ public class Pixel3_XL implements AutoCloseable, Runnable{
     public void close() throws Exception {
         connection.close();
     }
+
+    public void sendMessage() throws InterruptedException, IOException {
+
+        Messages messages = new Messages(ad);
+        NewChatPage newChatPage = messages.newChat();
+        newChatPage.setSearchContact(deviceB);
+        EditMessage editMessage = newChatPage.chooseContact();
+        String message = "Hi mate! what is the time?";
+        editMessage.addMessage(message);
+
+         Date date = new Date();
+         DateFormat format = new SimpleDateFormat("HHmm");
+         String time = format.format(date);
+
+        String messageRabbit = " ["+deviceA+"] "+message;
+        System.out.println(messageRabbit);
+        String response = this.call(messageRabbit);
+        Boolean correctness = (response.contains(time))?true:false;
+        System.out.println(" ["+deviceA+"] Got "+deviceB+" response- (" + response + " ) , and the correctness is: "+correctness);
+    }
+
+        public void sendMessage2() throws IOException, InterruptedException {
+            String message2 = " What are you doing today?";
+
+            EditMessage editMessage2 = new EditMessage(ad);
+            editMessage2.addMessage(message2);
+
+            String messageRabbit2 = " ["+deviceA+"] "+message2;
+            System.out.println(messageRabbit2);
+            String response2 = this.call(messageRabbit2);
+            Boolean correctness2 = (response2.contains("working"))?true:false;
+            System.out.println(" ["+deviceA+"] Got "+deviceB+" response- (" + response2 + " ) , and the correctness is: "+correctness2);
+
+        }
+
+
 
 
 }

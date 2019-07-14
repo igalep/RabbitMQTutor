@@ -7,8 +7,9 @@ import infra.AppiumServer;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.json.JSONObject;
-import org.openqa.selenium.By;
-import org.openqa.selenium.interactions.Actions;
+import pom.EditMessage;
+import pom.Messages;
+import pom.NewChatPage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class Pixel3 implements Runnable{
     private DeviceData deviceData;
     private JSONObject deviceDetails;
     private URL urlPixel3_S;
-    Connection connection;
+    String response;
 
 
     public Pixel3(String device_a, String device_b, JSONObject readDeviceFile ) {
@@ -44,7 +45,6 @@ public class Pixel3 implements Runnable{
         deviceB = device_b;
         devicDetails = readDeviceFile;
         deviceDetails = getSubJSON(devicDetails, deviceA);
-        //int serverPort = deviceDetails.getInt("serverPort");
         try {
             service = appiumServer.initServer();
             urlPixel3_S = appiumServer.getServerURL();
@@ -53,6 +53,7 @@ public class Pixel3 implements Runnable{
         deviceData = DriverManagerFactory.getDriverManager(deviceDetails.getString("os"), deviceA,urlPixel3_S).getDriverInfo();
         deviceData.setAppiumDriverLocalService(service);
         ad = deviceData.getAppiumDriver();
+        response = "";
     }
     @Override
     public void run(){
@@ -74,39 +75,17 @@ public class Pixel3 implements Runnable{
                         .correlationId(delivery.getProperties().getCorrelationId())
                         .build();
 
-                String response = "";
-
                 try {
                     String message = new String(delivery.getBody(), "UTF-8");
 
                     if (message.contains("time")){
-                        Date date = new Date();
-                        DateFormat format = new SimpleDateFormat("HHmm");
-
-                        ad.findElement(By.id("com.google.android.apps.messaging:id/start_new_conversation_button")).click();
-                        Thread.sleep(1000);
-                        ad.findElement(By.id("com.google.android.apps.messaging:id/recipient_text_view")).click();
-                        Actions action=new Actions(ad);
-                        action.sendKeys(deviceB).build().perform();
-                        Thread.sleep(1000);
-                        ad.findElement(By.id("com.google.android.apps.messaging:id/contact_list_view")).findElements(By.className("android.widget.FrameLayout")).get(0).click();
-                        ad.findElement(By.id("com.google.android.apps.messaging:id/compose_message_text")).click();
-                        ad.findElement(By.id("com.google.android.apps.messaging:id/compose_message_text")).sendKeys("The time is- "+format.format(date));
-                        ad.findElement(By.id("com.google.android.apps.messaging:id/send_message_button_icon")).click();
-                        response = " ["+deviceA+"] The time is- "+format.format(date);
-                        System.out.println(response);
+                        checkTime();
                     }
                     if (message.contains("doing")){
-
-                        ad.findElement(By.id("com.google.android.apps.messaging:id/compose_message_text")).click();
-                        String message2 = "I am currently working on new project";
-                        ad.findElement(By.id("com.google.android.apps.messaging:id/compose_message_text")).sendKeys(message2);
-                        ad.findElement(By.id("com.google.android.apps.messaging:id/send_message_button_icon")).click();
-                        response = " ["+deviceA+"] "+message2;
-                        System.out.println(response);
+                        checkDoing();
                     }
 
-                } catch (RuntimeException | InterruptedException e) {
+                } catch (RuntimeException e) {
                     System.out.println(" ["+deviceA+"] " + e.toString());
                 } finally {
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, response.getBytes("UTF-8"));
@@ -139,5 +118,28 @@ public class Pixel3 implements Runnable{
     public void close(){
         deviceData.getAppiumDriver().quit();
         deviceData.getAppiumDriverLocalService().stop();
+    }
+
+    public void checkTime() {
+        Date date = new Date();
+        DateFormat format = new SimpleDateFormat("HHmm");
+
+        Messages messages = new Messages(ad);
+        NewChatPage newChatPage = messages.newChat();
+        newChatPage.setSearchContact(deviceB);
+        EditMessage editMessage = newChatPage.chooseContact();
+        String message ="The time is- "+format.format(date);
+        editMessage.addMessage(message);
+     response = " ["+deviceA+"] The time is- "+format.format(date);
+        System.out.println(response);
+    }
+
+    public void checkDoing(){
+
+        EditMessage editMessage = new EditMessage(ad);
+        String message2 = "I am currently working on new project";
+        editMessage.addMessage(message2);
+       response = " ["+deviceA+"] "+message2;
+        System.out.println(response);
     }
 }

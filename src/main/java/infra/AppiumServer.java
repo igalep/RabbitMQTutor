@@ -3,14 +3,9 @@ package infra;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import org.openqa.selenium.net.UrlChecker;
 import org.openqa.selenium.remote.DesiredCapabilities;
-
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 public class AppiumServer {
 
