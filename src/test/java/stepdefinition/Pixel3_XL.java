@@ -127,7 +127,7 @@ public class Pixel3_XL implements AutoCloseable, Runnable{
         String messageRabbit = " ["+deviceA+"] "+message;
         System.out.println(messageRabbit);
         String response = this.call(messageRabbit);
-        Boolean correctness = (response.contains(time))?true:false;
+        boolean correctness = (response.contains(time))?true:false;
         System.out.println(" ["+deviceA+"] Got "+deviceB+" response- (" + response + " ) , and the correctness is: "+correctness);
     }
 
@@ -140,12 +140,9 @@ public class Pixel3_XL implements AutoCloseable, Runnable{
             String messageRabbit2 = " ["+deviceA+"] "+message2;
             System.out.println(messageRabbit2);
             String response2 = this.call(messageRabbit2);
-            Boolean correctness2 = (response2.contains("working"))?true:false;
+            boolean correctness2 = (response2.contains("working"))?true:false;
             System.out.println(" ["+deviceA+"] Got "+deviceB+" response- (" + response2 + " ) , and the correctness is: "+correctness2);
 
+            Bridge.setStatus(Boolean.toString(correctness2));
         }
-
-
-
-
 }

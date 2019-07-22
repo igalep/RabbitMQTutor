@@ -2,8 +2,10 @@ import infra.AppiumServer;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.json.JSONObject;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import stepdefinition.Bridge;
 import stepdefinition.GlobalStepDefinition;
 import stepdefinition.Pixel3;
 import stepdefinition.Pixel3_XL;
@@ -53,6 +55,9 @@ public class MainTest {
         pool.execute(ms);
 
         pool.awaitTermination(1 , TimeUnit.MINUTES);
+
+        String status = Bridge.getStatus();
+        Assert.assertNotEquals("true" , status);
     }
 
     @After
